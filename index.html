@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLAYGROUND — Play. Compete. Repeat.</title>
+  <meta name="description" content="A stylish mini-game arcade. Discover and play browser games. Compete, earn XP, unlock achievements.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand" onclick="navigate('home')">
+      <span class="logo-icon">▶</span>
+      <span class="logo-text">PLAYGROUND</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link active" data-page="home">Home</button>
+      <button class="nav-link" data-page="library">Games</button>
+      <button class="nav-link" data-page="leaderboard">Leaderboard</button>
+      <button class="nav-link" data-page="profile">Profile</button>
+    </div>
+    <div class="nav-player">
+      <div class="player-chip" onclick="navigate('profile')">
+        <div class="player-avatar">P</div>
+        <div class="player-info">
+          <span class="player-name" id="nav-player-name">Player</span>
+          <span class="player-level" id="nav-player-level">Lvl 1</span>
+        </div>
+      </div>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="nav-link" data-page="home">Home</button>
+    <button class="nav-link" data-page="library">Games</button>
+    <button class="nav-link" data-page="leaderboard">Leaderboard</button>
+    <button class="nav-link" data-page="profile">Profile</button>
+  </div>
+
+  <!-- Main Content -->
+  <main id="app">
+    <!-- HOME PAGE -->
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-bg">
+          <div class="floating-card card-1">🧠</div>
+          <div class="floating-card card-2">⚡</div>
+          <div class="floating-card card-3">🎯</div>
+          <div class="floating-card card-4">🔢</div>
+          <div class="floating-card card-5">🎮</div>
+        </div>
+        <div class="hero-content">
+          <h1 class="hero-title">Play. Compete. Repeat.</h1>
+          <p class="hero-subtitle">One playground. Endless little challenges.</p>
+          <button class="btn btn-primary btn-lg" onclick="navigate('library')">
+            Explore Games
+            <span class="btn-icon">→</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2>Featured Games</h2>
+          <button class="btn btn-ghost" onclick="navigate('library')">View All</button>
+        </div>
+        <div class="games-grid featured-grid" id="featured-games"></div>
+      </div>
+
+      <div class="section stats-section">
+        <div class="section-header">
+          <h2>Your Stats</h2>
+        </div>
+        <div class="stats-grid" id="home-stats">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-games">0</div>
+            <div class="stat-label">Games Played</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-score">0</div>
+            <div class="stat-label">Total Score</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-level">1</div>
+            <div class="stat-label">Level</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-streak">0</div>
+            <div class="stat-label">Win Streak</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2>Popular Now</h2>
+        </div>
+        <div class="games-grid" id="popular-games"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2>Recent Activity</h2>
+        </div>
+        <div class="recent-list" id="recent-games">
+          <div class="empty-state">
+            <div class="empty-icon">🕹️</div>
+            <p>No games played yet. Jump in!</p>
+            <button class="btn btn-primary" onclick="navigate('library')">Browse Games</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIBRARY PAGE -->
+    <section class="page" id="page-library">
+      <div class="page-header">
+        <h1>Game Library</h1>
+        <p>Discover your next challenge</p>
+      </div>
+      <div class="category-filters" id="category-filters">
+        <button class="filter-btn active" data-cat="all">All</button>
+        <button class="filter-btn" data-cat="brain">🧠 Brain</button>
+        <button class="filter-btn" data-cat="reaction">⚡ Reaction</button>
+        <button class="filter-btn" data-cat="numbers">🔢 Numbers</button>
+        <button class="filter-btn" data-cat="accuracy">🎯 Accuracy</button>
+        <button class="filter-btn" data-cat="classic">🎮 Classic</button>
+      </div>
+      <div class="games-grid library-grid" id="library-games"></div>
+    </section>
+
+    <!-- LEADERBOARD PAGE -->
+    <section class="page" id="page-leaderboard">
+      <div class="page-header">
+        <h1>Leaderboard</h1>
+        <p>Top players this season</p>
+      </div>
+      <div class="leaderboard-container">
+        <div class="leaderboard-podium" id="podium"></div>
+        <div class="leaderboard-table-wrap">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Score</th>
+                <th>Level</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE PAGE -->
+    <section class="page" id="page-profile">
+      <div class="page-header">
+        <h1>Player Profile</h1>
+      </div>
+      <div class="profile-layout">
+        <div class="profile-card glass">
+          <div class="profile-avatar-lg" id="profile-avatar">P</div>
+          <input type="text" id="player-name-input" class="player-name-edit" value="Player" maxlength="16">
+          <div class="profile-level-bar">
+            <div class="level-info">
+              <span>Level <strong id="profile-level">1</strong></span>
+              <span id="profile-xp-text">0 / 100 XP</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="profile-xp-bar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="profile-stats-grid">
+            <div class="p-stat">
+              <span class="p-stat-val" id="p-games">0</span>
+              <span class="p-stat-lbl">Games</span>
+            </div>
+            <div class="p-stat">
+              <span class="p-stat-val" id="p-score">0</span>
+              <span class="p-stat-lbl">Total Score</span>
+            </div>
+            <div class="p-stat">
+              <span class="p-stat-val" id="p-best">0</span>
+              <span class="p-stat-lbl">Best Score</span>
+            </div>
+            <div class="p-stat">
+              <span class="p-stat-val" id="p-streak">0</span>
+              <span class="p-stat-lbl">Win Streak</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="achievements-panel glass">
+          <h3>Achievements</h3>
+          <div class="achievements-grid" id="achievements-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME PAGES -->
+    <section class="page" id="page-game">
+      <div class="game-header">
+        <button class="btn btn-ghost btn-sm" onclick="exitGame()">← Back</button>
+        <div class="game-title-area">
+          <h2 id="game-title">Game</h2>
+          <span class="game-category" id="game-category"></span>
+        </div>
+        <div class="game-live-stats" id="game-live-stats"></div>
+      </div>
+      <div class="game-stage" id="game-stage">
+        <!-- Dynamic game content -->
+      </div>
+    </section>
+
+    <!-- RESULT OVERLAY -->
+    <div class="result-overlay" id="result-overlay">
+      <div class="result-card glass">
+        <div class="result-badge" id="result-badge">GAME COMPLETE</div>
+        <div class="result-new-high" id="result-new-high" style="display:none">🏆 NEW HIGH SCORE!</div>
+        <div class="result-stats">
+          <div class="result-stat">
+            <span class="r-label">Score</span>
+            <span class="r-value" id="result-score">0</span>
+          </div>
+          <div class="result-stat">
+            <span class="r-label">Best</span>
+            <span class="r-value" id="result-best">0</span>
+          </div>
+          <div class="result-stat">
+            <span class="r-label">Time</span>
+            <span class="r-value" id="result-time">—</span>
+          </div>
+          <div class="result-stat">
+            <span class="r-label">XP Earned</span>
+            <span class="r-value xp" id="result-xp">+0</span>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button class="btn btn-primary" id="btn-play-again">Play Again</button>
+          <button class="btn btn-secondary" onclick="navigate('library')">Back to Playground</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>PLAYGROUND © 2026 — Built for the love of play</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
